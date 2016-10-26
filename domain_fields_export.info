@@ -1,0 +1,7 @@
+name = Domain fields export
+description = This module allows you to export the Domine Fields by features
+package = Custom
+core = 7.x
+
+dependencies[] = domain_fields
+dependencies[] = domain

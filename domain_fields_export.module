@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * Implements hook_features_api().
+ */
+function domain_fields_export_features_api() {
+  $components = array(
+    'domain_fields_export' => array(
+      'name' => t('Domain fields variables'),
+      'default_hook' => 'domain_fields_export_default_variables',
+      'default_file' => FEATURES_DEFAULTS_CUSTOM,
+      'default_filename' => 'fields_export',
+      'feature_source' => TRUE,
+      'file' => drupal_get_path('module', 'domain_fields_export') .'/domain_fields_export.features.inc',
+    ),
+  );
+  return $components;
+}
