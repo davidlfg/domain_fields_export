@@ -20,8 +20,10 @@ function domain_fields_export_features_export_options() {
  * Implements hook_features_export().
  */
 function domain_fields_export_features_export($data, &$export, $module_name) {
+  $export['dependencies']['domain_fields_export'] = 'domain_fields_export';
   $export['dependencies']['domain_fields'] = 'domain_fields';
   $export['dependencies']['domain'] = 'domain';
+  $export['dependencies']['features'] = 'features';
   $list = domain_features_selection($data);
   foreach ($list as $machine_name) {
   	$all_fields = domain_fields_settings(array('machine_name' => $machine_name));
@@ -82,14 +84,16 @@ function domain_fields_export_features_revert($module) {
 function domain_fields_export_features_rebuild($module) {
   if ($domain_fields_variables = domain_fields_export_features_load($module, 'domain_fields_export_variables', TRUE)) {
 		foreach ($domain_fields_variables as $machine_name => $feature_values) {
-			$settings = variable_get('domain_fields_' . $machine_name, array());
-				foreach ($feature_values as $bundle => $field_values) {
-					foreach ($field_values as $field_name => $values) {
-					if (isset($settings['node'][$bundle][$field_name]))
+			$settings = variable_domain_fields_get('domain_fields_' . $machine_name, array());
+			foreach ($feature_values as $bundle => $field_values) {
+				foreach ($field_values as $field_name => $values) {
+
+					if (isset($settings['node'][$bundle][$field_name])) {
 						$settings['node'][$bundle][$field_name] = array_merge($settings['node'][$bundle][$field_name], $values);
-				}
+          }
+        }
 			}
-			variable_set('domain_fields_' . $machine_name, $settings);
+			variable_domain_fields_set('domain_fields_' . $machine_name, $settings);
 		}
   }
 }
